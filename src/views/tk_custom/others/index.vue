@@ -15,6 +15,7 @@ const loading=ref(false);
 /** 导出按钮操作 */
 function handleExport() {
     proxy.download('kingdee/exportWFData/'+input_WF.value, {}, `外发上锡_${new Date().getTime()}.xlsx`)
+    // {"FormId":"SFC_OperOutGroupSend","FieldKeys":"FSupplier.FShortName,FBillNo,FCreatorId.FName,FDate,FOplanInFo,FMaterialName,FMaterialSpec,FMOBaseUnitId.FName,F_UNW_Text_qtr,FOutSendQtyFake,FRateValQty,FRateOperQty,F_UNW_Base_re5","FilterString":[{"Left":"","FieldName":"FBillNo","Compare":"67","Value":"WWFC1302","Right":"","Logic":0},{"Left":"","FieldName":"FLineType","Compare":"29","Value":"A","Right":"","Logic":0}],"OrderString":"","TopRowCount":0,"StartRow":0,"Limit":10000,"SubSystemId":""}
 }
 
 </script>
