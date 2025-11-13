@@ -325,63 +325,80 @@
   </div>
 </template>
 <script setup name="TalentOperation">
-import { nextTick, reactive, ref } from "vue";
+import { nextTick, reactive, ref, onMounted } from "vue";
 import {
-  getListApi,
-  delByIdsApi,
-  addTalentInfoApi,
-  uploadFileApi,
-  getTalentInfoApi,
-  editTalentInfoApi,
+  getListApi,        // 获取人才列表API
+  delByIdsApi,       // 批量删除人才API
+  addTalentInfoApi,  // 新增人才API
+  uploadFileApi,     // 文件上传API
+  getTalentInfoApi,  // 获取人才详情API
+  editTalentInfoApi, // 修改人才API
 } from "@/api/tk_custom/talentApi";
-import { useDict } from "@/utils/dict";
-import modal from "@/plugins/modal";
-import { status } from "nprogress";
+import { useDict } from "@/utils/dict"; // 字典工具
+import modal from "@/plugins/modal";     // 模态框工具
+import { status } from "nprogress";      // 进度条
 
+// 加载状态
 const loading = ref(false);
+// 获取学历字典数据
 const { edu: edus } = useDict("edu");
+// 获取是否字典数据
 const { sys_yes_no } = useDict("sys_yes_no");
+// 获取性别字典数据
 const { sys_user_sex } = useDict("sys_user_sex");
+// 查询表单引用
 const queryRef = ref(null);
+// API代理路径
 const proxyPath = ref([import.meta.env.VITE_APP_BASE_API]);
+// 是否显示搜索表单
 const showSearch = ref(true);
-
+// 提交表单加载状态
 const isSubLoading = ref(false);
+// 总记录数
 const total = ref(0);
-
+// 选中的记录ID数组
 const selectedIds = ref([]);
-
+// 是否单选
 const single = ref(true);
+// 是否多选
 const multiple = ref(true);
+
+// 上传状态
+const isUploading = ref(false);
 
 // 表单参数
 const queryParams = reactive({
-  pageNum: 1,
-  pageSize: 10,
-  name: undefined,
-  position: undefined,
-  eduId: undefined,
-  schoolName: undefined,
+  pageNum: 1,        // 当前页码
+  pageSize: 10,      // 每页条数
+  name: undefined,   // 姓名
+  position: undefined, // 职位
+  eduId: undefined,  // 学历ID
+  schoolName: undefined, // 学校名称
 });
 
+// 表格数据列表
 const tableList = ref([]);
 
+// 对话框显示状态
 const openDialog = ref(false);
+// 对话框标题
 const dialogDialog = ref("添加人员信息");
 
+// 人才信息表单
 const talentInfoForm = reactive({
-  id: 0,
-  name: "",
-  gender: "",
-  eduId: "",
-  birthDate: "",
-  isMarriedId: "",
-  position: "",
-  phoneNumber: "",
-  schoolName: "",
-  nativePlace: "",
-  attachments: "",
-  remark: "",
+  id: 0,              // 主键ID
+  name: "",           // 姓名
+  gender: "",         // 性别
+  eduId: "",          // 学历ID
+  birthDate: "",      // 出生日期
+  isMarriedId: "",    // 婚否
+  position: "",       // 职位
+  phoneNumber: "",    // 联系电话
+  schoolName: "",     // 毕业学校
+  nativePlace: "",    // 籍贯
+  attachments: "",    // 附件路径
+  remark: "",         // 备注
+  imgPaths: [],       // 图片路径数组
 });
 
 // 执行查询
@@ -389,10 +406,14 @@ function handleQuery() {
   handleTalentList();
 }
 
+/**
+ * 获取人才列表数据
+ */
 async function handleTalentList() {
   const res = await getListApi(queryParams);
   const { rows, total: t } = res;
   tableList.value = rows;
+  // 将附件路径字符串转换为数组
   tableList.value.forEach((item) => {
     item.attachments = item.attachments ? item.attachments.split(",") : [];
   });
@@ -405,11 +426,17 @@ function resetQuery() {
   handleQuery();
 }
 
+/**
+ * 处理新增按钮点击事件
+ */
 function handleAdd() {
   openDialog.value = true;
   isEdit.value = false;
 }
 
+/**
+ * 处理编辑按钮点击事件（批量操作）
+ */
 async function handleEdit() {
   const id = selectedIds.value[0];
   if (!id) return;
@@ -421,6 +448,10 @@ async function handleEdit() {
   openDialog.value = true;
 }
 
+/**
+ * 处理表格行编辑按钮点击事件
+ * @param {Object} record - 当前行数据
+ */
 async function handleUpdate(record) {
   if (!record) return;
   const { data: talentInfo } = await getTalentInfoApi(record.id);
@@ -431,6 +462,10 @@ async function handleUpdate(record) {
   openDialog.value = true;
 }
 
+/**
+ * 设置人才信息表单数据
+ * @param {Object} talentInfo - 人才信息数据
+ */
 function setTalentInfoForm(talentInfo) {
   talentInfoForm.id = talentInfo.id;
   talentInfoForm.name = talentInfo.name;
@@ -443,10 +478,14 @@ function setTalentInfoForm(talentInfo) {
   talentInfoForm.schoolName = talentInfo.schoolName;
   talentInfoForm.nativePlace = talentInfo.nativePlace;
   talentInfoForm.remark = talentInfo.remark;
+  
+  // 处理附件路径
   const imagesPaths = talentInfo.attachments
     ? talentInfo.attachments.split(",")
     : [];
   talentInfoForm.attachments = imagesPaths;
+  
+  // 设置上传文件列表
   uploadFileList.value = imagesPaths.map((item) => {
     return {
       name: item.split("/").pop(),
@@ -457,21 +496,35 @@ function setTalentInfoForm(talentInfo) {
   });
 }
 
+/**
+ * 处理删除按钮点击事件
+ */
 function handleDelete() {
   modal.confirm("你确定要删除吗？").then(function () {
     delByIdsApi(selectedIds.value);
   });
 }
+
+/**
+ * 处理分页变化事件
+ */
 function handleGetTableList() {
   handleQuery();
 }
 
+/**
+ * 处理表格选择变化事件
+ * @param {Array} records - 选中的记录数组
+ */
 function handleSelectionChange(records) {
   selectedIds.value = records.map((item) => item.id);
   single.value = selectedIds.value.length !== 1;
   multiple.value = selectedIds.value.length < 0;
 }
 
+/**
+ * 重置查询参数
+ */
 function resetQueryData() {
   queryParams.name = undefined;
   queryParams.position = undefined;
@@ -479,7 +532,9 @@ function resetQueryData() {
   queryParams.eduId = undefined;
 }
 
+// 人才表单引用
 const talentRef = ref(null);
+// 表单验证规则
 const rules = {
   name: [
     { required: true, message: "请输入姓名", trigger: ["change", "blur"] },
@@ -506,10 +561,17 @@ const rules = {
     { required: true, message: "请输入籍贯", trigger: ["change", "blur"] },
   ],
 };
+// 是否为编辑模式
 const isEdit = ref(false);
 
+/**
+ * 对话框打开事件
+ */
 function dialogOpen() {}
 
+/**
+ * 对话框关闭事件
+ */
 function dialogClose() {
   openDialog.value = false;
   talentRef.value.resetFields();
@@ -517,14 +579,25 @@ function dialogClose() {
   talentInfoForm.id = 0;
 }
 
+/**
+ * 表单取消事件
+ */
 function formCancel() {
   dialogClose();
 }
 
+// 上传组件引用
 const uploadRef = ref(null);
-const uploadArr = ref([]); // 要上传的图片数据
-const uploadFileList = ref([]); // 修改时回显图片列表
+// 要上传的图片数据数组
+const uploadArr = ref([]); 
+// 修改时回显图片列表
+const uploadFileList = ref([]); 
 
+/**
+ * 上传文件变化事件
+ * @param {Object} file - 当前文件
+ * @param {Array} fileList - 文件列表
+ */
 function uploadChange(file, fileList) {
   uploadArr.value.push({
     name: `${Date.now()}-${file.name}`,
@@ -535,6 +608,11 @@ function uploadChange(file, fileList) {
   });
 }
 
+/**
+ * 移除文件事件
+ * @param {Object} file - 要移除的文件
+ * @param {Array} fileList - 文件列表
+ */
 function handleRemove(file, fileList) {
   if (file.value?.status === "success") {
     uploadFileList.value = uploadFileList.value.filter(
@@ -546,38 +624,74 @@ function handleRemove(file, fileList) {
   }
 }
 
+// 预览对话框显示状态
 const dialogVisible = ref(false);
+// 预览图片路径
 const dialogImageUrl = ref("");
+
+/**
+ * 预览图片事件
+ * @param {Object} file - 要预览的文件
+ */
 function handlePictureCardPreview(file) {
   dialogImageUrl.value = file.url;
   dialogVisible.value = true;
 }
 
+/**
+ * 上传前事件
+ * @param {Object} file - 要上传的文件
+ */
 function beforeUpload(file) {
   isUploading.value = true;
 }
 
+/**
+ * 上传成功事件
+ * @param {Object} response - 上传响应
+ * @param {Object} file - 上传文件
+ * @param {Array} fileList - 文件列表
+ */
 function uploadSuccess(response, file, fileList) {
   isUploading.value = false;
   if (response.code != 200) return;
   const filename = response.msg;
-  form.value.imgPaths.push(proxyPath.value + filename);
+  talentInfoForm.imgPaths.push(proxyPath.value + filename);
 }
 
+/**
+ * 上传失败事件
+ * @param {Object} err - 错误信息
+ * @param {Object} file - 上传文件
+ * @param {Array} fileList - 文件列表
+ */
 function uploadError(err, file, fileList) {
   isUploading.value = false;
 }
 
+/**
+ * 自定义上传方法
+ * @param {Object} content - 上传内容
+ */
 function uploadImg(content) {
   const formData = new FormData();
   formData.append("file", content.file);
   const fileName = content.file.name;
 }
 
+/**
+ * 文件超出限制事件
+ * @param {Array} files - 超出的文件数组
+ * @param {Array} fileList - 文件列表
+ */
 function handleMoreFiles(files, fileList) {
-  proxy.$modal.msgError("最大只允许6张图片！请重新选择！");
+  modal.msgError("最大只允许6张图片！请重新选择！");
 }
 
+/**
+ * 上传图片
+ * @returns {Array} - 上传后的图片路径数组
+ */
 async function uploadImages() {
   if (!uploadArr.value.length) return [];
   const formData = new FormData();
@@ -594,19 +708,30 @@ async function uploadImages() {
   return imagePath;
 }
 
+/**
+ * 提交表单
+ */
 async function submitForm() {
   talentRef.value.validate(async (valid) => {
     if (valid) {
       try {
         isSubLoading.value = true;
+        
+        // 上传图片
         const imagePathArr = await uploadImages();
+        
+        // 添加已存在的图片路径
         if (uploadFileList.value.length > 0) {
           uploadFileList.value.forEach((item) => {
             imagePathArr.push(item.url);
           });
         }
+        
+        // 设置附件路径
         talentInfoForm.attachments = imagePathArr.join(",");
+        
         if (talentInfoForm.id && isEdit.value) {
+          // 修改人才信息
           const res = await editTalentInfoApi(talentInfoForm);
           const { data, code } = res;
           if (code === 200) {
@@ -618,6 +743,7 @@ async function submitForm() {
             modal.msgError("修改失败！");
           }
         } else {
+          // 新增人才信息
           const res = await addTalentInfoApi(talentInfoForm);
           const { data, code } = res;
           if (code === 200 && data.id) {
@@ -638,6 +764,10 @@ async function submitForm() {
   });
 }
 
+/**
+ * 生成UUID（无横线）
+ * @returns {string} - UUID字符串
+ */
 function generateUUIDWithoutDash() {
   return "xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx".replace(/[xy]/g, function (c) {
     const r = (Math.random() * 16) | 0;
@@ -646,13 +776,17 @@ function generateUUIDWithoutDash() {
   });
 }
 
+/**
+ * 组件挂载后执行
+ */
 onMounted(() => {
   nextTick(() => {
-    handleQuery();
+    handleQuery(); // 加载数据
   });
 });
 </script>
 <style lang="scss" scoped>
+// 自定义上传组件样式
 .uploader {
   :deep(.el-upload--picture-card) {
     width: 60px;
@@ -668,14 +802,19 @@ onMounted(() => {
   }
 }
 
+// 加号图标样式
 .puls-icon {
   width: 60px;
   height: 60px;
 }
+
+// 图片样式
 .imageClass {
   border: 1px solid #dcdfe6;
   border-radius: 4px;
 }
+
+// 图片间距
 .imageClass + .imageClass {
   margin-left: 2px;
 }
