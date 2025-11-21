@@ -600,7 +600,7 @@ function setTalentInfoForm(talentInfo) {
   talentInfoForm.schoolName = talentInfo.schoolName;
   talentInfoForm.nativePlace = talentInfo.nativePlace;
   talentInfoForm.remark = talentInfo.remark;
-  talentInfoForm.interviewTime = talnetInfo.interviewTime;
+  talentInfoForm.interviewTime = talentInfo.interviewTime || '';
 
   // 处理附件路径
   const imagesPaths = talentInfo.attachments
