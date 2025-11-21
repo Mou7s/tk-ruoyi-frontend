@@ -167,7 +167,7 @@
       />
       <el-table-column
         label="出生日期"
-        width="95"
+        width="100"
         align="center"
         prop="birthDate"
       >
@@ -681,9 +681,6 @@ const rules = {
   ],
   birthDate: [
     { required: true, message: "请选择出生日期", trigger: ["change", "blur"] },
-  ],
-  interviewTime: [
-    { required: true, message: "请选择面试日期", trigger: ["change", "blur"] },
   ],
   nativePlace: [
     { required: true, message: "请输入籍贯", trigger: ["change", "blur"] },
