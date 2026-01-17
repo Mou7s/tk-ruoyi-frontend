@@ -1,58 +1,223 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
     <title>建议/意见收集</title>
-</head>
-<script src="./src/api/tool/jquery.min.js"></script>
-<body>
-<div id="div1"  style="display: flex;flex-direction: column;">
-    <div style="margin-top: 20px;font-weight: bold;    color: cornflowerblue;">当前页面不会获取用户的任何信息，属于完全匿名。请放心提出自己的宝贵建议及意见</div>
-    <textarea placeholder="请输入您的宝贵建议、意见，同时请注意文明用语。（注：3分钟内，只能提交一次！请组织好语言再进行填写。限2000字以内）" id="suggestText" style="    height: 70vh;
-    font-size: 16px;
-    border: 3px solid cornflowerblue;
-    border-radius: 5px;"></textarea>
-    <button onclick="sumbitSuggest()" style="margin-top: 15px;
-    background: cornflowerblue;
-    color: white;
-    border: 0;
-    height: 40px;
-    border-radius: 5px;
-    font-size: 18px;">匿名提交</button>
-</div>
-<div  id="div2"  style="display:none">
-    提交成功！<a href="" onclick="refresh()">再写一条</a>
-</div>
-<script>
-    function refresh() {
-       window.location.reload();
-    }
-    function changeShow() {
-        document.getElementById("div1").style="display:none";
-        document.getElementById("div2").style="height: 100vh;display: flex;align-items: center;justify-content: center;font-size: 20px;font-weight: bold;";
-    }
-    function sumbitSuggest() {
-        var val=document.getElementById("suggestText").value;
-        if(!val)
-            return;
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="./src/api/tool/jquery.min.js"></script>
+  </head>
+
+  <body class="min-h-screen bg-slate-50">
+    <main class="mx-auto flex min-h-screen w-full max-w-3xl flex-col px-4 py-6">
+      <!-- 输入区 -->
+      <section id="div1" class="flex flex-1 flex-col gap-4">
+        <div
+          class="rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm font-semibold text-blue-700"
+        >
+          当前页面不会主动收集用户身份信息；请文明用语，放心提交您的宝贵建议与意见。
+        </div>
+
+        <div class="flex-1">
+          <label
+            for="suggestText"
+            class="mb-2 block text-sm font-medium text-slate-700"
+          >
+            建议/意见内容
+          </label>
+
+          <textarea
+            id="suggestText"
+            maxlength="2000"
+            placeholder="请输入您的宝贵建议、意见。（注：3分钟内只能提交一次；限2000字以内）"
+            class="h-[70vh] w-full resize-none rounded-lg border-2 border-blue-300 bg-white p-3 text-base leading-relaxed text-slate-800 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-200"
+          ></textarea>
+
+          <div
+            class="mt-2 flex items-center justify-between text-xs text-slate-500"
+          >
+            <span id="statusText">未提交</span>
+            <span><span id="count">0</span>/2000</span>
+          </div>
+        </div>
+
+        <button
+          id="submitBtn"
+          type="button"
+          class="inline-flex h-11 items-center justify-center rounded-lg bg-blue-600 px-6 text-base font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 disabled:cursor-not-allowed disabled:bg-slate-300"
+        >
+          <span id="btnText">匿名提交</span>
+          <span
+            id="btnLoading"
+            class="ml-2 hidden h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"
+          ></span>
+        </button>
+      </section>
+
+      <!-- 成功区 -->
+      <section id="div2" class="hidden flex-1 items-center justify-center">
+        <div
+          class="rounded-xl border border-emerald-200 bg-emerald-50 px-6 py-8 text-center"
+        >
+          <div class="text-xl font-bold text-emerald-700">提交成功！</div>
+          <button
+            type="button"
+            id="againBtn"
+            class="mt-4 inline-flex h-10 items-center justify-center rounded-lg bg-emerald-600 px-5 text-sm font-semibold text-white transition hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-200"
+          >
+            再写一条
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      // ===== 配置 =====
+      const API_URL = "/tk_custom/suggest/scanAdd"; // 建议用相对路径，避免 localhost 问题
+      const LIMIT_MS = 3 * 60 * 1000; // 3 分钟
+      const STORAGE_KEY = "suggest_last_submit_at";
+
+      // ===== DOM =====
+      const div1 = document.getElementById("div1");
+      const div2 = document.getElementById("div2");
+      const textarea = document.getElementById("suggestText");
+      const submitBtn = document.getElementById("submitBtn");
+      const btnText = document.getElementById("btnText");
+      const btnLoading = document.getElementById("btnLoading");
+      const statusText = document.getElementById("statusText");
+      const countEl = document.getElementById("count");
+      const againBtn = document.getElementById("againBtn");
+
+      // ===== 工具函数 =====
+      function setLoading(isLoading) {
+        submitBtn.disabled = isLoading;
+        btnLoading.classList.toggle("hidden", !isLoading);
+        btnText.textContent = isLoading ? "提交中..." : "匿名提交";
+      }
+
+      function showSuccess() {
+        div1.classList.add("hidden");
+        div2.classList.remove("hidden");
+      }
+
+      function resetForm() {
+        textarea.value = "";
+        countEl.textContent = "0";
+        statusText.textContent = "未提交";
+        div2.classList.add("hidden");
+        div1.classList.remove("hidden");
+        textarea.focus();
+      }
+
+      function now() {
+        return Date.now();
+      }
+
+      function getLastSubmitAt() {
+        const v = localStorage.getItem(STORAGE_KEY);
+        return v ? Number(v) : 0;
+      }
+
+      function setLastSubmitAt(ts) {
+        localStorage.setItem(STORAGE_KEY, String(ts));
+      }
+
+      function remainingMs() {
+        const last = getLastSubmitAt();
+        if (!last) return 0;
+        const remain = last + LIMIT_MS - now();
+        return remain > 0 ? remain : 0;
+      }
+
+      function formatRemain(ms) {
+        const sec = Math.ceil(ms / 1000);
+        const m = Math.floor(sec / 60);
+        const s = sec % 60;
+        return `${m}:${String(s).padStart(2, "0")}`;
+      }
+
+      function refreshSubmitState() {
+        const remain = remainingMs();
+        const text = textarea.value.trim();
+        const canSubmit = text.length > 0 && remain === 0;
+
+        submitBtn.disabled = !canSubmit;
+
+        if (remain > 0) {
+          statusText.textContent = `冷却中：${formatRemain(remain)} 后可再次提交`;
+        } else {
+          statusText.textContent = text.length > 0 ? "可提交" : "未提交";
+        }
+      }
+
+      // ===== 字数统计 =====
+      function updateCount() {
+        countEl.textContent = String(textarea.value.length);
+        refreshSubmitState();
+      }
+      textarea.addEventListener("input", updateCount);
+      updateCount();
+
+      // 每秒刷新一次冷却提示
+      setInterval(refreshSubmitState, 1000);
+
+      // ===== 提交逻辑 =====
+      submitBtn.addEventListener("click", function () {
+        const val = textarea.value.trim();
+        if (!val) return;
+
+        const remain = remainingMs();
+        if (remain > 0) {
+          alert(`3分钟内只能提交一次，请在 ${formatRemain(remain)} 后再试。`);
+          return;
+        }
+
+        setLoading(true);
+
         $.ajax({
-            type: "POST",
-            url: "http://localhost:8180/tk_custom/suggest/scanAdd",
-            data: JSON.stringify({suggestText:val}),
-            contentType: "application/json",
-            success: function(respMsg){
-                if(respMsg.code=='200'){
-                    alert("提交成功！");
-                    changeShow();
-                }else{
-                    alert(respMsg.msg);
-                }
+          type: "POST",
+          url: API_URL,
+          data: JSON.stringify({ suggestText: val }),
+          contentType: "application/json",
+          dataType: "json",
+          timeout: 10000,
+          success: function (respMsg) {
+            // 兼容：后端可能返回 code 为数字或字符串
+            const ok = String(respMsg?.code) === "200";
+
+            if (ok) {
+              setLastSubmitAt(now());
+              alert("提交成功！");
+              showSuccess();
+            } else {
+              alert(respMsg?.msg || "提交失败，请稍后重试。");
             }
+          },
+          error: function (xhr, textStatus) {
+            if (textStatus === "timeout") {
+              alert("请求超时，请检查网络或稍后再试。");
+            } else {
+              alert("提交失败，请检查接口地址或跨域配置。");
+            }
+          },
+          complete: function () {
+            setLoading(false);
+            refreshSubmitState();
+          },
         });
-    }
+      });
 
-</script>
-</body>
+      // 再写一条（不强制刷新页面，体验更好）
+      againBtn.addEventListener("click", function () {
+        resetForm();
+      });
 
+      // 页面加载时刷新提交按钮状态
+      refreshSubmitState();
+    </script>
+  </body>
 </html>
