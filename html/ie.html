@@ -2,269 +2,779 @@
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>请升级您的浏览器</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
-    <meta name="renderer" content="webkit" />
-    <base target="_blank" />
+
+    <!-- 建议：生产环境最好自托管 Tailwind 或打包进项目，避免 CDN 不稳定 -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <style type="text/tailwindcss">
-      @theme {
-        --color-clifford: #da373d;
-      }
-    </style>
-    <style type="text/css">
-      html,
-      body,
-      div,
-      span,
-      applet,
-      object,
-      iframe,
-      h1,
-      h2,
-      h3,
-      h4,
-      h5,
-      h6,
-      p,
-      blockquote,
-      pre,
-      a,
-      abbr,
-      acronym,
-      address,
-      big,
-      cite,
-      code,
-      del,
-      dfn,
-      em,
-      img,
-      ins,
-      kbd,
-      q,
-      s,
-      samp,
-      small,
-      strike,
-      strong,
-      sub,
-      sup,
-      tt,
-      var,
-      b,
-      u,
-      i,
-      center,
-      dl,
-      dt,
-      dd,
-      ol,
-      ul,
-      li,
-      fieldset,
-      form,
-      label,
-      legend,
-      table,
-      caption,
-      tbody,
-      tfoot,
-      thead,
-      tr,
-      th,
-      td,
-      article,
-      aside,
-      canvas,
-      details,
-      embed,
-      figure,
-      figcaption,
-      footer,
-      header,
-      hgroup,
-      menu,
-      nav,
-      output,
-      ruby,
-      section,
-      summary,
-      time,
-      mark,
-      audio,
-      video {
-        border: 0;
-        font-size: 100%;
-        font: inherit;
-        vertical-align: baseline;
-        margin: 0;
-        padding: 0;
-      }
-      article,
-      aside,
-      details,
-      figcaption,
-      figure,
-      footer,
-      header,
-      hgroup,
-      menu,
-      nav,
-      section {
-        display: block;
-      }
-      body {
-        line-height: 1;
-      }
-      ol,
-      ul {
-        list-style: none;
-      }
-      blockquote,
-      q {
-        quotes: none;
-      }
-      blockquote:before,
-      blockquote:after,
-      q:before,
-      q:after {
-        content: none;
-      }
-      table {
-        border-collapse: collapse;
-        border-spacing: 0;
-      }
-      a {
-        text-decoration: none;
-        color: #0072c6;
-      }
-      a:hover {
-        text-decoration: none;
-        color: #004d8c;
-      }
-      body {
-        width: 960px;
-        margin: 0 auto;
-        padding: 10px;
-        font-size: 14px;
-        line-height: 24px;
-        color: #454545;
-        font-family:
-          "Microsoft YaHei UI", "Microsoft YaHei", DengXian, SimSun, "Segoe UI",
-          Tahoma, Helvetica, sans-serif;
-        overflow-y: scroll;
-      }
-      h1 {
-        font-size: 40px;
-        line-height: 80px;
-        font-weight: 100;
-        margin-bottom: 10px;
-      }
-      h2 {
-        font-size: 20px;
-        line-height: 25px;
-        font-weight: 100;
-        margin: 10px 0;
-      }
-      em {
-        color: red;
-      }
-      p {
-        margin-bottom: 10px;
-      }
-      hr {
-        margin: 20px 0;
-        border: 0;
-        border-top: 1px solid #dadada;
-      }
-      span {
-        display: block;
-        font-size: 12px;
-        line-height: 12px;
-      }
-      .clean {
-        clear: both;
-      }
-      .browser {
-        padding: 10px 10px;
-      }
-      .browser li {
-        width: auto;
-        padding: 0 80px;
-        margin-top: 30px;
-        height: 34px;
-        line-height: 22px;
-        float: left;
-        list-style: none;
-        background: url(data:image/png;base64,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)
-          no-repeat;
-        padding-left: 40px;
-      }
-      .browser .browser-firefox {
-        background-position: 0 -34px;
-      }
-      .browser .browser-ie {
-        background-position: 0 -68px;
-        margin-left: 0px;
-      }
-      .browser .browser-360 {
-        background-position: 0 -170px;
-        margin-left: -27px;
-      }
-    </style>
   </head>
-  <body style="margin-top: 50px">
-    <h1>请升级您的浏览器，以便我们更好的为您提供服务！</h1>
-    <p>
-      您正在使用 Internet Explorer
-      的早期版本（IE11以下版本或使用该内核的浏览器）。这意味着在升级浏览器前，您将无法访问此网站。
-    </p>
-    <hr />
-    <h2>
-      请注意：微软公司对Windows XP 及 Internet Explorer 早期版本的支持已经结束
-    </h2>
-    <p>
-      自 2016 年 1 月 12 日起，Microsoft 不再为 IE 11
-      以下版本提供相应支持和更新。没有关键的浏览器安全更新，您的电脑可能易受有害病毒、间谍软件和其他恶意软件的攻击，它们可以窃取或损害您的业务数据和信息。请参阅
-      <a
-        href="https://www.microsoft.com/zh-cn/WindowsForBusiness/End-of-IE-support"
-        >微软对 Internet Explorer 早期版本的支持将于 2016 年 1 月 12
-        日结束的说明</a
-      >
-      。
-    </p>
-    <hr />
-    <h2>您可以选择更先进的浏览器</h2>
-    <p>
-      推荐使用以下浏览器的最新版本。如果您的电脑已有以下浏览器的最新版本则直接使用该浏览器访问即可。
-    </p>
-    <ul class="browser">
-      <li class="browser-chrome">
-        <a
-          href="https://www.google.cn/chrome/browser/desktop/index.html?hl=zh-CN&standalone=1"
+
+  <body class="min-h-dvh bg-slate-50 text-slate-800">
+    <main class="mx-auto flex min-h-dvh max-w-3xl items-center px-4 py-10">
+      <section class="w-full">
+        <div
+          class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200 md:p-10"
         >
-          谷歌浏览器<span>Google Chrome</span></a
-        >
-      </li>
-      <li class="browser-firefox">
-        <a href="https://www.mozilla.org/zh-CN/firefox/new/">
-          火狐浏览器<span>Mozilla Firefox</span></a
-        >
-      </li>
-      <li class="browser-ie">
-        <a
-          href="https://windows.microsoft.com/zh-cn/internet-explorer/download-ie"
-        >
-          IE 11 浏览器<span>Internet Explorer</span></a
-        >
-      </li>
-      <li class="browser-360">
-        <a href="http://se.360.cn/"> 360安全浏览器<span>360 Chrome</span></a>
-      </li>
-      <div class="clean"></div>
-    </ul>
-    <hr />
-    <h1 class="font-bold underline">Hello world!</h1>
+          <header class="space-y-3">
+            <h1 class="text-2xl font-black tracking-tight md:text-3xl">
+              请升级您的浏览器，以便我们更好地为您提供服务
+            </h1>
+            <p class="text-sm leading-6 text-slate-600 md:text-base">
+              检测到您正在使用较旧的浏览器（例如 IE 内核或 IE11
+              以下）。该类浏览器缺少必要的安全更新与现代网页能力，
+              可能导致页面无法打开、功能异常或存在安全风险。
+            </p>
+
+            <div
+              class="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-900"
+              role="alert"
+            >
+              <p class="text-sm leading-6">
+                建议使用最新版
+                <strong
+                  >Microsoft Edge / Google Chrome / Mozilla Firefox</strong
+                >
+                访问。
+              </p>
+            </div>
+          </header>
+
+          <hr class="my-6 border-slate-200" />
+
+          <section class="space-y-3">
+            <h2 class="text-lg font-semibold md:text-xl">推荐浏览器</h2>
+            <p class="text-sm text-slate-600">
+              如果您的电脑已安装以下浏览器，请直接使用其最新版本访问此网站：
+            </p>
+
+            <div class="grid gap-3 md:grid-cols-3">
+              <!-- Chrome -->
+              <a
+                class="group flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 hover:border-slate-300 hover:bg-slate-50"
+                href="https://www.google.com/chrome/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span
+                  class="inline-flex size-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 group-hover:text-slate-900"
+                  aria-hidden="true"
+                >
+                  <!-- Chrome icon  -->
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="15.5 15.5 224.5 224.5"
+                  >
+                    <defs>
+                      <radialGradient cy="0" cx="0.5" id="r">
+                        <stop offset="0" stop-color="#f06b59" />
+                        <stop offset="1" stop-color="#df2227" />
+                      </radialGradient>
+                      <radialGradient r="0.76" cy="0.3" cx="0.65" id="g">
+                        <stop offset="0.65" stop-color="#4cb749" />
+                        <stop offset="1" stop-color="#388b41" />
+                      </radialGradient>
+                      <radialGradient r="0.8" cy="0.25" cx="0.36" id="y">
+                        <stop offset="0.6" stop-color="#FCD209" />
+                        <stop offset="0.7" stop-color="#f7c616" />
+                        <stop offset="1" stop-color="#bc821e" />
+                      </radialGradient>
+                      <radialGradient
+                        r="1"
+                        cy="0"
+                        cx="0.5"
+                        spreadMethod="pad"
+                        id="cf"
+                      >
+                        <stop offset="0.1" stop-color="#7FB3DF" />
+                        <stop offset="0.9" stop-color="#0F5B94" />
+                      </radialGradient>
+                      <radialGradient id="cb" r="1" cy="0" cx="0.5">
+                        <stop offset="0" stop-color="#F6F0EE" />
+                        <stop offset="1" stop-color="#ddd" />
+                      </radialGradient>
+                    </defs>
+                    <path
+                      d="m198,148a70,70 0 0 0 -140,0l20,0a50,50 0 0 1 100,0"
+                      fill-opacity="0.1"
+                    />
+                    <circle
+                      r="45"
+                      cx="127.5"
+                      cy="127.6"
+                      fill="url(#cf)"
+                      stroke="url(#cb)"
+                      stroke-width="9"
+                    />
+                    <path
+                      d="m228,78a112,112 0 0 0 -193,-13l45,78a50,50 0 0 1 47,-65"
+                      fill="url(#r)"
+                    />
+                    <path
+                      d="m35,65a112,112 0 0 0 84,174l47,-80a50,50 0 0 1 -86,-16"
+                      fill="url(#g)"
+                    />
+                    <path
+                      d="m119,239a112,112 0 0 0 109,-161l-101,0a50,50 0 0 1 39,81"
+                      fill="url(#y)"
+                    />
+                    <path
+                      d="m35,65l45,78a50,50 0 0 1 2,-34l-45,-47"
+                      opacity="0.075"
+                    />
+                    <path
+                      d="m119,239l47,-80a50,50 0 0 1 -29,17l-20,63"
+                      opacity="0.05"
+                    />
+                    <path
+                      d="m228,78l-101,0a50,50 0 0 1 39,19l64,-16"
+                      opacity="0.05"
+                    />
+                  </svg>
+                </span>
+
+                <span class="min-w-0">
+                  <span class="block font-medium">Google Chrome</span>
+                  <span class="block text-xs text-slate-500" S
+                    >速度快（常用）</span
+                  >
+                </span>
+
+                <span class="ml-auto text-slate-400 group-hover:text-slate-600"
+                  >→</span
+                >
+              </a>
+              <!-- Edge -->
+              <a
+                class="group flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 hover:border-slate-300 hover:bg-slate-50"
+                href="https://www.microsoft.com/edge"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span
+                  class="inline-flex size-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 group-hover:text-slate-900"
+                  aria-hidden="true"
+                >
+                  <!-- Edge icon  -->
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+                    <defs>
+                      <radialGradient
+                        id="b"
+                        cx="161.8"
+                        cy="68.9"
+                        r="95.4"
+                        gradientTransform="matrix(1 0 0 -.95 0 248.8)"
+                        gradientUnits="userSpaceOnUse"
+                      >
+                        <stop offset=".7" stop-opacity="0" />
+                        <stop offset=".9" stop-opacity=".5" />
+                        <stop offset="1" />
+                      </radialGradient>
+                      <radialGradient
+                        id="d"
+                        cx="-340.3"
+                        cy="63"
+                        r="143.2"
+                        gradientTransform="matrix(.15 -.99 -.8 -.12 176.6 -125.4)"
+                        gradientUnits="userSpaceOnUse"
+                      >
+                        <stop offset=".8" stop-opacity="0" />
+                        <stop offset=".9" stop-opacity=".5" />
+                        <stop offset="1" />
+                      </radialGradient>
+                      <radialGradient
+                        id="e"
+                        cx="113.4"
+                        cy="570.2"
+                        r="202.4"
+                        gradientTransform="matrix(-.04 1 2.13 .08 -1179.5 -106.7)"
+                        gradientUnits="userSpaceOnUse"
+                      >
+                        <stop offset="0" stop-color="#35c1f1" />
+                        <stop offset=".1" stop-color="#34c1ed" />
+                        <stop offset=".2" stop-color="#2fc2df" />
+                        <stop offset=".3" stop-color="#2bc3d2" />
+                        <stop offset=".7" stop-color="#36c752" />
+                      </radialGradient>
+                      <radialGradient
+                        id="f"
+                        cx="376.5"
+                        cy="568"
+                        r="97.3"
+                        gradientTransform="matrix(.28 .96 .78 -.23 -303.8 -148.5)"
+                        gradientUnits="userSpaceOnUse"
+                      >
+                        <stop offset="0" stop-color="#66eb6e" />
+                        <stop
+                          offset="1"
+                          stop-color="#66eb6e"
+                          stop-opacity="0"
+                        />
+                      </radialGradient>
+                      <linearGradient
+                        id="a"
+                        x1="63.3"
+                        y1="84"
+                        x2="241.7"
+                        y2="84"
+                        gradientTransform="matrix(1 0 0 -1 0 266)"
+                        gradientUnits="userSpaceOnUse"
+                      >
+                        <stop offset="0" stop-color="#0c59a4" />
+                        <stop offset="1" stop-color="#114a8b" />
+                      </linearGradient>
+                      <linearGradient
+                        id="c"
+                        x1="157.3"
+                        y1="161.4"
+                        x2="46"
+                        y2="40.1"
+                        gradientTransform="matrix(1 0 0 -1 0 266)"
+                        gradientUnits="userSpaceOnUse"
+                      >
+                        <stop offset="0" stop-color="#1b9de2" />
+                        <stop offset=".2" stop-color="#1595df" />
+                        <stop offset=".7" stop-color="#0680d7" />
+                        <stop offset="1" stop-color="#0078d4" />
+                      </linearGradient>
+                    </defs>
+                    <path
+                      d="M235.7 195.5a93.7 93.7 0 0 1-10.6 4.7 101.9 101.9 0 0 1-35.9 6.4c-47.3 0-88.5-32.5-88.5-74.3a31.5 31.5 0 0 1 16.4-27.3c-42.8 1.8-53.8 46.4-53.8 72.5 0 74 68.1 81.4 82.8 81.4 7.9 0 19.8-2.3 27-4.6l1.3-.4a128.3 128.3 0 0 0 66.6-52.8 4 4 0 0 0-5.3-5.6Z"
+                      transform="translate(-4.6 -5)"
+                      style="fill: url(#a)"
+                    />
+                    <path
+                      d="M235.7 195.5a93.7 93.7 0 0 1-10.6 4.7 101.9 101.9 0 0 1-35.9 6.4c-47.3 0-88.5-32.5-88.5-74.3a31.5 31.5 0 0 1 16.4-27.3c-42.8 1.8-53.8 46.4-53.8 72.5 0 74 68.1 81.4 82.8 81.4 7.9 0 19.8-2.3 27-4.6l1.3-.4a128.3 128.3 0 0 0 66.6-52.8 4 4 0 0 0-5.3-5.6Z"
+                      transform="translate(-4.6 -5)"
+                      style="isolation: isolate; opacity: 0.35; fill: url(#b)"
+                    />
+                    <path
+                      d="M110.3 246.3A79.2 79.2 0 0 1 87.6 225a80.7 80.7 0 0 1 29.5-120c3.2-1.5 8.5-4.1 15.6-4a32.4 32.4 0 0 1 25.7 13 31.9 31.9 0 0 1 6.3 18.7c0-.2 24.5-79.6-80-79.6-43.9 0-80 41.6-80 78.2a130.2 130.2 0 0 0 12.1 56 128 128 0 0 0 156.4 67 75.5 75.5 0 0 1-62.8-8Z"
+                      transform="translate(-4.6 -5)"
+                      style="fill: url(#c)"
+                    />
+                    <path
+                      d="M110.3 246.3A79.2 79.2 0 0 1 87.6 225a80.7 80.7 0 0 1 29.5-120c3.2-1.5 8.5-4.1 15.6-4a32.4 32.4 0 0 1 25.7 13 31.9 31.9 0 0 1 6.3 18.7c0-.2 24.5-79.6-80-79.6-43.9 0-80 41.6-80 78.2a130.2 130.2 0 0 0 12.1 56 128 128 0 0 0 156.4 67 75.5 75.5 0 0 1-62.8-8Z"
+                      transform="translate(-4.6 -5)"
+                      style="opacity: 0.41; fill: url(#d); isolation: isolate"
+                    />
+                    <path
+                      d="M157 153.8c-.9 1-3.4 2.5-3.4 5.6 0 2.6 1.7 5.2 4.8 7.3 14.3 10 41.4 8.6 41.5 8.6a59.6 59.6 0 0 0 30.3-8.3 61.4 61.4 0 0 0 30.4-52.9c.3-22.4-8-37.3-11.3-43.9C228 28.8 182.3 5 132.6 5a128 128 0 0 0-128 126.2c.5-36.5 36.8-66 80-66 3.5 0 23.5.3 42 10a72.6 72.6 0 0 1 30.9 29.3c6.1 10.6 7.2 24.1 7.2 29.5s-2.7 13.3-7.8 19.9Z"
+                      transform="translate(-4.6 -5)"
+                      style="fill: url(#e)"
+                    />
+                    <path
+                      d="M157 153.8c-.9 1-3.4 2.5-3.4 5.6 0 2.6 1.7 5.2 4.8 7.3 14.3 10 41.4 8.6 41.5 8.6a59.6 59.6 0 0 0 30.3-8.3 61.4 61.4 0 0 0 30.4-52.9c.3-22.4-8-37.3-11.3-43.9C228 28.8 182.3 5 132.6 5a128 128 0 0 0-128 126.2c.5-36.5 36.8-66 80-66 3.5 0 23.5.3 42 10a72.6 72.6 0 0 1 30.9 29.3c6.1 10.6 7.2 24.1 7.2 29.5s-2.7 13.3-7.8 19.9Z"
+                      transform="translate(-4.6 -5)"
+                      style="fill: url(#f)"
+                    />
+                  </svg>
+                </span>
+
+                <span class="min-w-0">
+                  <span class="block font-medium">Microsoft Edge</span>
+                  <span class="block text-xs text-slate-500"
+                    >兼容性强</span
+                  >
+                </span>
+
+                <span class="ml-auto text-slate-400 group-hover:text-slate-600"
+                  >→</span
+                >
+              </a>
+              <!-- Firefox -->
+              <a
+                class="group flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 hover:border-slate-300 hover:bg-slate-50"
+                href="https://www.mozilla.org/firefox/new/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span
+                  class="inline-flex size-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 group-hover:text-slate-900"
+                  aria-hidden="true"
+                >
+                  <!-- Firefox icon (simplified) -->
+                  <svg
+                    id="Layer_1"
+                    data-name="Layer 1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                    width="953.37"
+                    height="984"
+                    viewBox="0 0 953.37 984"
+                  >
+                    <defs>
+                      <radialGradient
+                        id="radial-gradient"
+                        cx="-14569.52"
+                        cy="9284.3"
+                        fx="-14598.28277817514"
+                        r="450.88"
+                        gradientTransform="matrix(0.76, 0.03, 0.05, -1.12, 11545.85, 11139.76)"
+                        gradientUnits="userSpaceOnUse"
+                      >
+                        <stop offset="0.1" stop-color="#ffea00" />
+                        <stop offset="0.17" stop-color="#ffde00" />
+                        <stop offset="0.28" stop-color="#ffbf00" />
+                        <stop offset="0.43" stop-color="#ff8e00" />
+                        <stop offset="0.77" stop-color="#ff272d" />
+                        <stop offset="0.87" stop-color="#e0255a" />
+                        <stop offset="0.95" stop-color="#cc2477" />
+                        <stop offset="1" stop-color="#c42482" />
+                      </radialGradient>
+                      <radialGradient
+                        id="radial-gradient-2"
+                        cx="-7540.92"
+                        cy="8862.36"
+                        r="791.23"
+                        gradientTransform="matrix(1.23, 0, 0, -1.23, 9900.64, 11054.07)"
+                        gradientUnits="userSpaceOnUse"
+                      >
+                        <stop offset="0" stop-color="#00ccda" />
+                        <stop offset="0.22" stop-color="#0083ff" />
+                        <stop offset="0.26" stop-color="#007af9" />
+                        <stop offset="0.33" stop-color="#0060e8" />
+                        <stop offset="0.33" stop-color="#005fe7" />
+                        <stop offset="0.44" stop-color="#2639ad" />
+                        <stop offset="0.52" stop-color="#401e84" />
+                        <stop offset="0.57" stop-color="#4a1475" />
+                      </radialGradient>
+                      <linearGradient
+                        id="linear-gradient"
+                        x1="540.64"
+                        y1="254.8"
+                        x2="349.2"
+                        y2="881.03"
+                        gradientTransform="matrix(1, 0, 0, -1, 0, 984)"
+                        gradientUnits="userSpaceOnUse"
+                      >
+                        <stop
+                          offset="0"
+                          stop-color="#000f43"
+                          stop-opacity="0.4"
+                        />
+                        <stop
+                          offset="0.48"
+                          stop-color="#001962"
+                          stop-opacity="0.17"
+                        />
+                        <stop
+                          offset="1"
+                          stop-color="#002079"
+                          stop-opacity="0"
+                        />
+                      </linearGradient>
+                      <radialGradient
+                        id="radial-gradient-3"
+                        cx="-8291.37"
+                        cy="7446.88"
+                        r="266.89"
+                        gradientTransform="matrix(1.22, 0.12, 0.12, -1.22, 10186.72, 10733.96)"
+                        gradientUnits="userSpaceOnUse"
+                      >
+                        <stop offset="0" stop-color="#ffea00" />
+                        <stop offset="0.5" stop-color="#ff272d" />
+                        <stop offset="1" stop-color="#c42482" />
+                      </radialGradient>
+                      <radialGradient
+                        id="radial-gradient-4"
+                        cx="-8315.51"
+                        cy="7702.79"
+                        r="445.68"
+                        gradientTransform="matrix(1.22, 0.12, 0.12, -1.22, 10186.72, 10733.96)"
+                        gradientUnits="userSpaceOnUse"
+                      >
+                        <stop offset="0" stop-color="#ffe900" />
+                        <stop offset="0.16" stop-color="#ffaf0e" />
+                        <stop offset="0.32" stop-color="#ff7a1b" />
+                        <stop offset="0.47" stop-color="#ff4e26" />
+                        <stop offset="0.62" stop-color="#ff2c2e" />
+                        <stop offset="0.76" stop-color="#ff1434" />
+                        <stop offset="0.89" stop-color="#ff0538" />
+                        <stop offset="1" stop-color="#ff0039" />
+                      </radialGradient>
+                      <radialGradient
+                        id="radial-gradient-5"
+                        cx="-8252.47"
+                        cy="7289.65"
+                        r="408.96"
+                        gradientTransform="matrix(1.22, 0.12, 0.12, -1.22, 10186.72, 10733.96)"
+                        gradientUnits="userSpaceOnUse"
+                      >
+                        <stop offset="0" stop-color="#ff272d" />
+                        <stop offset="0.5" stop-color="#c42482" />
+                        <stop offset="0.99" stop-color="#620700" />
+                      </radialGradient>
+                      <radialGradient
+                        id="radial-gradient-6"
+                        cx="715.19"
+                        cy="589.96"
+                        fx="743.1665035759816"
+                        fy="576.1323859732546"
+                        r="782.18"
+                        gradientTransform="matrix(1, 0, 0, -1, 0, 984)"
+                        gradientUnits="userSpaceOnUse"
+                      >
+                        <stop offset="0.16" stop-color="#ffea00" />
+                        <stop offset="0.23" stop-color="#ffde00" />
+                        <stop offset="0.37" stop-color="#ffbf00" />
+                        <stop offset="0.54" stop-color="#ff8e00" />
+                        <stop offset="0.76" stop-color="#ff272d" />
+                        <stop offset="0.8" stop-color="#f92433" />
+                        <stop offset="0.84" stop-color="#e91c45" />
+                        <stop offset="0.89" stop-color="#cf0e62" />
+                        <stop offset="0.94" stop-color="#b5007f" />
+                      </radialGradient>
+                      <radialGradient
+                        id="radial-gradient-7"
+                        cx="670.34"
+                        cy="952.71"
+                        r="891.45"
+                        gradientTransform="matrix(1, 0, 0, -1, 0, 984)"
+                        gradientUnits="userSpaceOnUse"
+                      >
+                        <stop offset="0.28" stop-color="#ffea00" />
+                        <stop offset="0.4" stop-color="#fd0" />
+                        <stop offset="0.63" stop-color="#ffba00" />
+                        <stop offset="0.86" stop-color="#ff9100" />
+                        <stop offset="0.93" stop-color="#ff6711" />
+                        <stop offset="0.99" stop-color="#ff4a1d" />
+                      </radialGradient>
+                      <linearGradient
+                        id="linear-gradient-2"
+                        x1="-8977.08"
+                        y1="7615.91"
+                        x2="-8670.05"
+                        y2="7694.17"
+                        gradientTransform="matrix(1.22, 0.12, 0.12, -1.22, 10186.72, 10733.96)"
+                        gradientUnits="userSpaceOnUse"
+                      >
+                        <stop
+                          offset="0"
+                          stop-color="#c42482"
+                          stop-opacity="0.5"
+                        />
+                        <stop
+                          offset="0.47"
+                          stop-color="#ff272d"
+                          stop-opacity="0.5"
+                        />
+                        <stop
+                          offset="0.49"
+                          stop-color="#ff2c2c"
+                          stop-opacity="0.51"
+                        />
+                        <stop
+                          offset="0.68"
+                          stop-color="#ff7a1a"
+                          stop-opacity="0.72"
+                        />
+                        <stop
+                          offset="0.83"
+                          stop-color="#ffb20d"
+                          stop-opacity="0.87"
+                        />
+                        <stop
+                          offset="0.94"
+                          stop-color="#ffd605"
+                          stop-opacity="0.96"
+                        />
+                        <stop offset="1" stop-color="#ffe302" />
+                      </linearGradient>
+                      <linearGradient
+                        id="linear-gradient-3"
+                        x1="188.29"
+                        y1="2056.08"
+                        x2="133.72"
+                        y2="2195.93"
+                        gradientTransform="matrix(0.99, 0.1, 0.1, -0.99, -247, 2281.31)"
+                        gradientUnits="userSpaceOnUse"
+                      >
+                        <stop
+                          offset="0"
+                          stop-color="#891551"
+                          stop-opacity="0.6"
+                        />
+                        <stop
+                          offset="1"
+                          stop-color="#c42482"
+                          stop-opacity="0"
+                        />
+                      </linearGradient>
+                      <linearGradient
+                        id="linear-gradient-4"
+                        x1="-39.01"
+                        y1="252.89"
+                        x2="55.1"
+                        y2="146.01"
+                        gradientTransform="matrix(0.99, 0.1, 0.1, -0.99, 232.13, 720.9)"
+                        gradientUnits="userSpaceOnUse"
+                      >
+                        <stop
+                          offset="0.01"
+                          stop-color="#891551"
+                          stop-opacity="0.5"
+                        />
+                        <stop
+                          offset="0.48"
+                          stop-color="#ff272d"
+                          stop-opacity="0.5"
+                        />
+                        <stop
+                          offset="1"
+                          stop-color="#ff272d"
+                          stop-opacity="0"
+                        />
+                      </linearGradient>
+                      <linearGradient
+                        id="linear-gradient-5"
+                        x1="141.88"
+                        y1="68.53"
+                        x2="141.95"
+                        y2="143.31"
+                        gradientTransform="matrix(0.99, 0.1, 0.1, -0.99, 232.13, 720.9)"
+                        gradientUnits="userSpaceOnUse"
+                      >
+                        <stop offset="0" stop-color="#c42482" />
+                        <stop
+                          offset="0.08"
+                          stop-color="#c42482"
+                          stop-opacity="0.81"
+                        />
+                        <stop
+                          offset="0.21"
+                          stop-color="#c42482"
+                          stop-opacity="0.57"
+                        />
+                        <stop
+                          offset="0.33"
+                          stop-color="#c42482"
+                          stop-opacity="0.36"
+                        />
+                        <stop
+                          offset="0.45"
+                          stop-color="#c42482"
+                          stop-opacity="0.2"
+                        />
+                        <stop
+                          offset="0.56"
+                          stop-color="#c42482"
+                          stop-opacity="0.09"
+                        />
+                        <stop
+                          offset="0.67"
+                          stop-color="#c42482"
+                          stop-opacity="0.02"
+                        />
+                        <stop
+                          offset="0.77"
+                          stop-color="#c42482"
+                          stop-opacity="0"
+                        />
+                      </linearGradient>
+                      <linearGradient
+                        id="linear-gradient-6"
+                        x1="620.52"
+                        y1="947.88"
+                        x2="926.18"
+                        y2="264.39"
+                        gradientTransform="matrix(1, 0, 0, -1, 0, 984)"
+                        gradientUnits="userSpaceOnUse"
+                      >
+                        <stop offset="0" stop-color="#fff14f" />
+                        <stop offset="0.27" stop-color="#ffee4c" />
+                        <stop offset="0.45" stop-color="#ffe643" />
+                        <stop offset="0.61" stop-color="#ffd834" />
+                        <stop offset="0.76" stop-color="#ffc41e" />
+                        <stop offset="0.89" stop-color="#ffab02" />
+                        <stop offset="0.9" stop-color="#ffa900" />
+                        <stop offset="0.95" stop-color="#ffa000" />
+                        <stop offset="1" stop-color="#ff9100" />
+                      </linearGradient>
+                      <linearGradient
+                        id="linear-gradient-7"
+                        x1="680.88"
+                        y1="554.79"
+                        x2="536.1"
+                        y2="166.04"
+                        gradientTransform="matrix(1, 0, 0, -1, 0, 984)"
+                        gradientUnits="userSpaceOnUse"
+                      >
+                        <stop offset="0" stop-color="#ff8e00" />
+                        <stop
+                          offset="0.04"
+                          stop-color="#ff8e00"
+                          stop-opacity="0.86"
+                        />
+                        <stop
+                          offset="0.08"
+                          stop-color="#ff8e00"
+                          stop-opacity="0.73"
+                        />
+                        <stop
+                          offset="0.13"
+                          stop-color="#ff8e00"
+                          stop-opacity="0.63"
+                        />
+                        <stop
+                          offset="0.18"
+                          stop-color="#ff8e00"
+                          stop-opacity="0.56"
+                        />
+                        <stop
+                          offset="0.23"
+                          stop-color="#ff8e00"
+                          stop-opacity="0.51"
+                        />
+                        <stop
+                          offset="0.28"
+                          stop-color="#ff8e00"
+                          stop-opacity="0.5"
+                        />
+                        <stop
+                          offset="0.39"
+                          stop-color="#ff8e00"
+                          stop-opacity="0.48"
+                        />
+                        <stop
+                          offset="0.52"
+                          stop-color="#ff8e00"
+                          stop-opacity="0.42"
+                        />
+                        <stop
+                          offset="0.68"
+                          stop-color="#ff8e00"
+                          stop-opacity="0.31"
+                        />
+                        <stop
+                          offset="0.84"
+                          stop-color="#ff8e00"
+                          stop-opacity="0.17"
+                        />
+                        <stop
+                          offset="1"
+                          stop-color="#ff8e00"
+                          stop-opacity="0"
+                        />
+                      </linearGradient>
+                    </defs>
+                    <title>Firefox_Logo,_2017_2</title>
+                    <g id="Layer_2" data-name="Layer 2">
+                      <g id="Firefox_-_Large" data-name="Firefox - Large">
+                        <path
+                          d="M770.28,91.56c-24,27.88-35.1,90.64-10.82,154.26s61.5,49.8,84.7,114.67c30.62,85.6,16.37,200.59,16.37,200.59s36.81,106.61,62.47-6.63C979.79,341.74,770.28,143.94,770.28,91.56Z"
+                          style="fill: url(#radial-gradient)"
+                        />
+                        <path
+                          id="_Path_"
+                          data-name=" Path "
+                          d="M478.07,974.64c245.24,0,443.9-199.74,443.9-446s-198.66-446-443.66-446S34.65,282.32,34.65,528.61C34.18,775.14,233.07,974.64,478.07,974.64Z"
+                          style="fill: url(#radial-gradient-2)"
+                        />
+                        <path
+                          d="M810.67,803.64a246.89,246.89,0,0,1-30.12,18.18,704,704,0,0,0,38.3-63c9.46-10.47,18.13-20.65,25.19-31.65,3.44-5.41,7.31-12.08,11.42-19.82,24.92-44.9,52.4-117.56,53.18-192.2v-5.66a257.6,257.6,0,0,0-5.71-55.75c.2,1.43.38,2.86.56,4.29-.22-1.1-.41-2.21-.64-3.31.37,2,.66,4,1,6,5.09,43.22,1.47,85.37-16.68,116.45-.29.45-.58.88-.87,1.32,9.41-47.23,12.56-99.39,2.09-151.6,0,0-4.19-25.38-35.38-102.44-18-44.35-49.83-80.72-78-107.21-24.69-30.55-47.11-51-59.47-64.06C689.72,126,678.9,105.61,674.45,92.31c-3.85-1.93-53.14-49.81-57-51.63-21.51,33.35-89.16,137.67-57,235.15,14.58,44.17,51.47,90,90.07,115.74,1.69,1.94,23,25,33.09,77.16,10.45,53.85,5,95.86-16.54,158-25.29,54.51-90.07,108.39-150.72,113.9-129.67,11.78-177.15-65.11-177.15-65.11C385.49,694,436.72,690.17,467.87,671c31.4-19.43,50.39-33.83,65.81-28.15C548.86,648.43,561,632,550.1,615a78.5,78.5,0,0,0-79.4-34.57c-31.43,5.11-60.23,30-101.41,5.89a85.52,85.52,0,0,1-7.73-5.06c-2.71-1.79,8.83,2.72,6.13.69-8-4.35-22.2-13.84-25.88-17.22-.61-.56,6.22,2.18,5.61,1.62-38.51-31.71-33.7-53.13-32.49-66.57,1-10.75,8-24.52,19.75-30.11,5.69,3.11,9.24,5.48,9.24,5.48s-2.43-5-3.74-7.58c.46-.2.9-.15,1.36-.34,4.66,2.25,15,8.1,20.41,11.67,7.07,5,9.33,9.44,9.33,9.44s1.86-1,.48-5.37c-.5-1.78-2.65-7.45-9.65-13.17h.44A81.2,81.2,0,0,1,374.42,478c2-7.18,5.53-14.68,4.75-28.09-.48-9.43-.26-11.87-1.92-15.51-1.49-3.13.83-4.35,3.42-1.1a32.83,32.83,0,0,0-2.21-7.4v-.24c3.23-11.24,68.25-40.46,73-43.88A67.36,67.36,0,0,0,470.59,361c3.62-5.76,6.34-13.85,7-26.11.36-8.84-3.76-14.73-69.51-21.62-18-1.77-28.53-14.8-34.53-26.82-1.09-2.59-2.21-4.94-3.33-7.28a58,58,0,0,1-2.56-8.43c10.75-30.87,28.81-57,55.37-76.7,1.45-1.32-5.78.34-4.34-1,1.69-1.54,12.71-6,14.79-7,2.54-1.2-10.88-6.9-22.73-5.51-12.07,1.36-14.63,2.8-21.07,5.53,2.67-2.66,11.17-6.15,9.18-6.13-13,2-29.18,9.56-43,18.12a10.73,10.73,0,0,1,.83-4.35c-6.44,2.73-22.26,13.79-26.87,23.14a44.33,44.33,0,0,0,.27-5.4,84.48,84.48,0,0,0-13.19,13.82l-.24.22c-37.36-15-70.23-16-98.05-9.28-6.09-6.11-9.06-1.64-22.91-32.07-.94-1.83.72,1.81,0,0-2.28-5.9,1.39,7.87,0,0-23.28,18.37-53.92,39.19-68.63,53.89-.18.59,17.16-4.9,0,0-6,1.72-5.6,5.28-6.51,37.5-.22,2.44,0,5.18-.22,7.38-11.75,15-19.75,27.64-22.78,34.21-15.19,26.18-31.93,67-48.15,131.55A334.36,334.36,0,0,1,75.2,398.36C61.71,432.63,48.67,486.44,46.07,569.3A483.61,483.61,0,0,1,58.6,518.64,473,473,0,0,0,93.33,719.71c9.33,22.82,24.76,57.46,51,95.4C226.9,902,343.31,956,472.21,956,606.79,956,727.64,897.13,810.67,803.64Z"
+                          style="fill: url(#linear-gradient)"
+                        />
+                        <path
+                          d="M711.1,866.71c162.87-18.86,235-186.7,142.38-190C769.85,674,634,875.61,711.1,866.71Z"
+                          style="fill: url(#radial-gradient-3)"
+                        />
+                        <path
+                          d="M865.21,642.42C977.26,577.21,948,436.34,948,436.34s-43.25,50.24-72.62,130.32C846.4,646,797.84,681.81,865.21,642.42Z"
+                          style="fill: url(#radial-gradient-4)"
+                        />
+                        <path
+                          d="M509.47,950.06C665.7,999.91,800,876.84,717.21,835.74,642,798.68,435.32,926.49,509.47,950.06Z"
+                          style="fill: url(#radial-gradient-5)"
+                        />
+                        <path
+                          d="M876.85,702.23c3.8-5.36,8.94-22.53,13.48-30.21,27.58-44.52,27.78-80,27.78-80.84,16.66-83.22,15.15-117.2,4.9-180-8.25-50.6-44.32-123.09-75.57-158-32.2-36-9.51-24.25-40.69-50.52-27.33-30.29-53.82-60.29-68.25-72.36C634.22,43.09,636.57,24.58,638.58,21.42c-.34.37-.84.92-1.47,1.64C635.87,18.14,635,14,635,14s-57,57-69,152c-7.83,62,15.38,126.68,49,168a381.37,381.37,0,0,0,59,58h0c25.4,36.48,39.38,81.49,39.38,129.91,0,121.24-98.34,219.53-219.65,219.53a220.45,220.45,0,0,1-49.13-5.52c-57.24-10.92-90.3-39.8-106.78-59.41-9.45-11.23-13.46-19.42-13.46-19.42,51.28,18.37,108,14.53,142.47-4.52,34.75-19.26,55.77-33.55,72.84-27.92,16.82,5.61,30.21-10.67,18.2-27.54-11.77-16.85-42.4-41-87.88-34.29-34.79,5.07-66.66,29.76-112.24,5.84a96.32,96.32,0,0,1-8.55-5c-3-1.77,9.77,2.69,6.79.68-8.87-4.32-24.57-13.73-28.64-17.07-.68-.56,6.88,2.16,6.2,1.6-42.62-31.45-37.3-52.69-36-66,1.07-10.66,8.81-24.32,21.86-29.86,6.3,3.08,10.23,5.43,10.23,5.43s-2.69-4.92-4.14-7.51c.51-.19,1-.15,1.5-.34,5.16,2.23,16.58,8,22.59,11.57,7.83,5,10.32,9.36,10.32,9.36s2.06-1,.54-5.33c-.56-1.77-2.93-7.39-10.68-13.07h.48a90.85,90.85,0,0,1,13.13,8.17c2.19-7.12,6.12-14.56,5.25-27.86-.53-9.35-.28-11.78-2.12-15.39-1.65-3.1.92-4.31,3.78-1.09a30,30,0,0,0-2.44-7.34v-.24c3.57-11.14,75.53-40.12,80.77-43.51a70.31,70.31,0,0,0,21.17-20.63c4-5.72,7-13.73,7.75-25.89.25-5.48-1.44-9.82-20.5-14-11.44-2.49-29.14-4.91-56.43-7.47-19.9-1.76-31.58-14.68-38.21-26.6-1.21-2.57-2.45-4.9-3.68-7.22a53.11,53.11,0,0,1-2.83-8.36,158.47,158.47,0,0,1,61.28-76.06c1.6-1.31-6.4.33-4.8-1,1.87-1.52,14.06-5.93,16.37-6.92,2.81-1.19-12-6.84-25.16-5.47-13.36,1.35-16.19,2.78-23.32,5.49,3-2.64,12.37-6.1,10.16-6.08-14.4,2-32.3,9.48-47.6,18a9.68,9.68,0,0,1,.92-4.31c-7.13,2.71-24.64,13.67-29.73,23a39.49,39.49,0,0,0,.29-5.35,88.68,88.68,0,0,0-14.6,13.7l-.27.22C258.14,196,221.75,195,191,201.72c-6.74-6.06-17.57-15.23-32.89-45.4-1-1.82-1.6,3.75-2.4,2-6-13.81-9.55-36.44-9-52,0,0-12.32,5.61-22.51,29.06-1.89,4.21-3.11,6.54-4.32,8.87-.56.68,1.27-7.7,1-7.24-1.77,3-6.36,7.19-8.37,12.62-1.38,4-3.32,6.27-4.56,11.29l-.29.46c-.1-1.48.37-6.08,0-5.14A236.1,236.1,0,0,0,95.34,186c-5.49,18-11.88,42.61-12.89,74.57-.24,2.42,0,5.14-.25,7.32-13,14.83-21.86,27.39-25.2,33.91-16.81,26-35.33,66.44-53.29,130.46a319.14,319.14,0,0,1,28.54-50C17.32,416.25,2.89,469.62,0,551.8a438.52,438.52,0,0,1,13.87-50.24C11.29,556.36,17.68,624.3,52.32,701c20.57,45,67.92,136.6,183.62,208h0s39.36,29.3,107,51.26c5,1.81,10.06,3.6,15.23,5.33q-2.43-1-4.71-2A484.88,484.88,0,0,0,492.27,984c175.18.15,226.85-70.2,226.85-70.2l-.51.38q3.71-3.49,7.14-7.26c-27.64,26.08-90.75,27.84-114.3,26,40.22-11.81,66.69-21.81,118.17-41.52q9-3.36,18.48-7.64l2-.94c1.25-.58,2.49-1.13,3.75-1.74a349.21,349.21,0,0,0,70.26-44c51.7-41.3,63-81.56,68.83-108.1-.82,2.54-3.37,8.47-5.17,12.32-13.31,28.48-42.84,46-74.91,61a689,689,0,0,0,42.38-62.44C865.77,729.39,869,713.15,876.85,702.23Z"
+                          style="fill: url(#radial-gradient-6)"
+                        />
+                        <path
+                          d="M813.92,801c21.08-23.24,40-49.82,54.35-80,36.9-77.58,94-206.58,49-341.31C881.77,273.22,833,215,771.11,158.12,670.56,65.76,642.48,24.52,642.48,0c0,0-116.09,129.41-65.74,264.38s153.46,130,221.68,270.87c80.27,165.74-65,346.61-185,397.24,7.35-1.63,267-60.38,280.61-208.88C893.68,726.34,887.83,767.41,813.92,801Z"
+                          style="fill: url(#radial-gradient-7)"
+                        />
+                        <path
+                          d="M477.59,319.37c.39-8.77-4.16-14.66-76.68-21.46-29.84-2.76-41.26-30.33-44.75-41.94-10.61,27.56-15,56.49-12.64,91.48,1.61,22.92,17,47.52,24.37,62,0,0,1.64-2.13,2.39-2.91,13.86-14.43,71.94-36.42,77.39-39.54C453.69,363.16,476.58,346.44,477.59,319.37Z"
+                          style="fill: url(#linear-gradient-2)"
+                        />
+                        <path
+                          d="M158.31,156.47c-1-1.82-1.6,3.75-2.4,2-6-13.81-9.58-36.2-8.72-52,0,0-12.32,5.61-22.51,29.06-1.89,4.21-3.11,6.54-4.32,8.86-.56.68,1.27-7.7,1-7.24-1.77,3-6.36,7.19-8.35,12.38-1.65,4.24-3.35,6.52-4.61,11.77-.39,1.43.39-6.32.05-5.38C84.72,201.68,80.19,271,82.69,268,133.17,214.14,191,201.36,191,201.36c-6.15-4.53-19.53-17.63-32.7-44.89Z"
+                          style="fill: url(#linear-gradient-3)"
+                        />
+                        <path
+                          d="M349.84,720.1c-69.72-29.77-149-71.75-146-167.14C207.92,427.35,321,452.18,321,452.18c-4.27,1-15.68,9.16-19.72,17.82-4.27,10.83-12.07,35.28,11.55,60.9,37.09,40.19-76.2,95.36,98.66,199.57,4.41,2.4-41-1.43-61.64-10.36Z"
+                          style="fill: url(#linear-gradient-4)"
+                        />
+                        <path
+                          d="M325.07,657.5c49.44,17.21,107,14.19,141.52-4.86,23.09-12.85,52.7-33.43,70.92-28.35-15.78-6.24-27.73-9.15-42.1-9.86-2.45,0-5.38,0-8-.32a136.24,136.24,0,0,0-15.76.86c-8.9.82-18.77,6.43-27.74,5.53-.48,0,8.7-3.77,8-3.61-4.75,1-9.92,1.21-15.37,1.88-3.47.39-6.45.82-9.89,1-103,8.73-190-55.81-190-55.81-7.41,25,33.17,74.3,88.52,93.57Z"
+                          style="fill: url(#linear-gradient-5)"
+                        />
+                        <path
+                          d="M813.74,801.65c104.16-102.27,156.86-226.58,134.58-366,0,0,8.9,71.5-24.85,144.63,16.21-71.39,18.1-160.11-25-252C841,205.64,746.45,141.11,710.35,114.19,655.66,73.4,633,31.87,632.57,23.3c-16.34,33.48-65.77,148.2-5.31,247,56.64,92.56,145.86,120,208.33,205C950.67,631.67,813.74,801.65,813.74,801.65Z"
+                          style="fill: url(#linear-gradient-6)"
+                        />
+                        <path
+                          d="M798.81,535.55C762.41,460.35,717,427.55,674,392c5,7,6.23,9.47,9,14,37.83,40.32,93.61,138.66,53.11,262.11C659.88,900.48,355,791.06,323,760.32,335.93,894.81,561,959.16,707.6,872,791,793,858.47,658.79,798.81,535.55Z"
+                          style="fill: url(#linear-gradient-7)"
+                        />
+                      </g>
+                    </g>
+                  </svg>
+                </span>
+
+                <span class="min-w-0">
+                  <span class="block font-medium">Mozilla Firefox</span>
+                  <span class="block text-xs text-slate-500">隐私友好</span>
+                </span>
+
+                <span class="ml-auto text-slate-400 group-hover:text-slate-600"
+                  >→</span
+                >
+              </a>
+            </div>
+
+            <p class="pt-2 text-xs leading-5 text-slate-500">
+              注：如果您使用的是企业内网/旧系统自带的 IE 内核浏览器，请联系 IT
+              协助升级或切换到 Edge 的 IE 模式（仅在必须兼容旧系统时使用）。
+            </p>
+          </section>
+
+          <hr class="my-6 border-slate-200" />
+
+          <section class="space-y-2">
+            <h2 class="text-lg font-semibold md:text-xl">为什么需要升级？</h2>
+            <ul
+              class="list-disc space-y-1 pl-5 text-sm leading-6 text-slate-600"
+            >
+              <li>旧浏览器缺少安全更新，容易被恶意软件攻击。</li>
+              <li>
+                不支持现代 Web
+                标准，可能导致页面白屏、按钮失效、无法登录等问题。
+              </li>
+              <li>兼容旧浏览器需要额外成本，且体验通常更差。</li>
+            </ul>
+          </section>
+
+          <footer
+            class="mt-8 flex flex-col gap-2 text-xs text-slate-500 md:flex-row md:items-center md:justify-between"
+          >
+            <span>若升级后仍无法访问，请截图并联系管理员。</span>
+            <span id="ua" class="break-all"></span>
+          </footer>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      // 可选：显示 User-Agent，便于排查（不影响页面）
+      document.getElementById("ua").textContent = "UA: " + navigator.userAgent;
+
+      // 可选：简单识别 IE（仅提示用，不做跳转）
+      var isIE = !!document.documentMode;
+      if (isIE) {
+        console.warn("Detected IE.");
+      }
+    </script>
   </body>
 </html>
