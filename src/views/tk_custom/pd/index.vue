@@ -188,6 +188,21 @@
           <dict-tag :options="tk_pd" :value="scope.row.process" />
         </template>
       </el-table-column>
+      <el-table-column label="工序状态" align="center" prop="processStatus">
+        <template #default="scope">
+          <el-tag
+            v-if="
+              scope.row.processStatus === 1 || scope.row.processStatus === '1'
+            "
+          >
+            已完成
+          </el-tag>
+          <el-tag v-else type="warning">
+            <span>进行中</span>
+          </el-tag>
+        </template>
+      </el-table-column>
+
       <el-table-column
         label="操作"
         align="center"
@@ -302,6 +317,10 @@
             placeholder="请输入批号"
             v-bind:readonly="isEdit"
           />
+        </el-form-item>
+
+        <el-form-item label="工序状态" prop="processStatus">
+          <el-input></el-input>
         </el-form-item>
 
         <el-form-item label="备注" prop="remark">
