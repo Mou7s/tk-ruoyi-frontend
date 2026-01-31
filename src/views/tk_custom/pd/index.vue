@@ -190,11 +190,7 @@
       </el-table-column>
       <el-table-column label="工序状态" align="center" prop="processStatus">
         <template #default="scope">
-          <el-tag
-            v-if="
-              scope.row.processStatus === 1 || scope.row.processStatus === '1'
-            "
-          >
+          <el-tag v-if="String(scope.row.processStatus) === '1'" type="success">
             已完成
           </el-tag>
           <el-tag v-else type="warning">
@@ -215,8 +211,9 @@
             icon="Edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['tk_custom:pd:edit']"
-            >修改</el-button
           >
+            修改
+          </el-button>
           <!--<el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['tk_custom:pd:remove']">删除</el-button>-->
         </template>
       </el-table-column>
@@ -320,7 +317,10 @@
         </el-form-item>
 
         <el-form-item label="工序状态" prop="processStatus">
-          <el-input></el-input>
+          <el-select v-model="form.processStatus">
+            <el-option label="进行中" value="0" />
+            <el-option label="已完成" value="1" />
+          </el-select>
         </el-form-item>
 
         <el-form-item label="备注" prop="remark">
@@ -386,18 +386,20 @@ const data = reactive({
 });
 
 const { queryParams, form, rules } = toRefs(data);
+// 对话框打开与关闭时的处理
 function dialogOpen() {
-  proxy.$nextTick(function () {
-    this.$refs.pdNumberRef.focus();
-    this.$refs.pdNumberRef.select();
+  proxy.$nextTick(() => {
+    proxy.$refs.pdNumberRef?.focus?.();
+    proxy.$refs.pdNumberRef?.select?.();
   });
 }
 function dialogClose() {
-  proxy.$nextTick(function () {
-    this.$refs.mainpageFlowNo.focus();
-    this.$refs.mainpageFlowNo.select();
+  proxy.$nextTick(() => {
+    proxy.$refs.mainpageFlowNo?.focus?.();
+    proxy.$refs.mainpageFlowNo?.select?.();
   });
 }
+
 //根据流程单号查询
 function queryByFlowNo() {
   if (!t_process.value)
@@ -454,6 +456,7 @@ function reset() {
     pdNumber: null,
     remark: null,
     isSplitBill: "0",
+    processStatus: "0",
   };
   proxy.resetForm("pdRef");
 }
@@ -489,12 +492,18 @@ function handleAdd() {
 function handleUpdate(row) {
   reset();
   isEdit.value = true;
-  const _id = row.id || ids.value;
-  getPd(_id).then((response) => {
-    form.value = response.data;
-    open.value = true;
-    title.value = "修改盘点信息";
-  });
+  // const _id = row.id || ids.value;
+  const _id = row?.id ?? ids.value?.[0];
+
+  getPd(_id)
+    .then((response) => {
+      form.value = response.data;
+      open.value = true;
+      title.value = "修改盘点信息";
+    })
+    .catch(() => {
+      proxy.$modal.msgError("获取盘点信息失败");
+    });
 }
 
 /** 提交按钮 */
