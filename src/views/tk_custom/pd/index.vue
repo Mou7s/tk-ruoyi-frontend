@@ -3,54 +3,74 @@
     <el-form
       :model="queryParams"
       ref="queryRef"
-      :inline="true"
       v-show="showSearch"
-      label-width="68px"
+      class="search-form"
+      @keyup.enter="handleQuery"
     >
-      <div>
-        <el-form-item label="盘点时间" prop="pdDate">
-          <el-date-picker
-            clearable
-            v-model="queryParams.pdDate"
-            type="date"
-            value-format="YYYY-MM-DD"
-            placeholder="请选择盘点时间"
-          >
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="盘点工序" prop="process">
-          <el-select
-            style="width: 100px"
-            v-model="queryParams.process"
-            placeholder="请选择盘点工序"
-            clearable
-          >
-            <el-option
-              v-for="dict in tk_pd"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="流程单号" prop="flowNo">
-          <el-input
-            v-model="queryParams.flowNo"
-            placeholder="请输入流程单号"
-            clearable
-            @keyup.enter="handleQuery"
-          />
-        </el-form-item>
-        <el-form-item label="产品编码" prop="productId">
-          <el-input
-            v-model="queryParams.productId"
-            placeholder="请输入产品编码"
-            clearable
-            @keyup.enter="handleQuery"
-          />
-        </el-form-item>
-      </div>
+      <el-row :gutter="12" align="middle">
+        <el-col :xs="24" :sm="12" :md="8" :lg="6">
+          <el-form-item label="盘点时间" prop="pdDate">
+            <el-date-picker
+              v-model="queryParams.pdDate"
+              type="date"
+              value-format="YYYY-MM-DD"
+              placeholder="请选择盘点时间"
+              clearable
+              style="width: 100%"
+            >
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
 
+        <el-col :xs="24" :sm="12" :md="8" :lg="6">
+          <el-form-item label="盘点工序" prop="process">
+            <el-select
+              v-model="queryParams.process"
+              placeholder="请选择盘点工序"
+              clearable
+              filterable
+              style="width: 100%"
+            >
+              <el-option
+                v-for="dict in tk_pd"
+                :key="dict.value"
+                :label="dict.label"
+                :value="dict.value"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+
+        <el-col :xs="24" :sm="12" :md="8" :lg="6">
+          <el-form-item label="流程单号" prop="flowNo">
+            <el-input
+              v-model="queryParams.flowNo"
+              placeholder="请输入流程单号"
+              clearable
+            />
+          </el-form-item>
+        </el-col>
+        <!-- 右侧按钮固定一列 -->
+        <el-col :xs="24" :sm="12" :md="24" :lg="6" class="search-actions">
+          <el-button type="primary" icon="Search" @click="handleQuery">
+            搜索
+          </el-button>
+          <el-button icon="Refresh" @click="resetQuery"> 重置 </el-button>
+
+          <!-- 展开/收起更多条件 -->
+          <el-button link type="primary" @click="moreOpen = !moreOpen">
+            {{ moreOpen ? "收起" : "更多条件" }}
+          </el-button>
+        </el-col>
+      </el-row>
+      <el-form-item label="产品编码" prop="productId">
+        <el-input
+          v-model="queryParams.productId"
+          placeholder="请输入产品编码"
+          clearable
+          @keyup.enter="handleQuery"
+        />
+      </el-form-item>
       <el-form-item label="产品名称" prop="productName">
         <el-input
           v-model="queryParams.productName"
@@ -364,6 +384,7 @@ const total = ref(0);
 const title = ref("");
 const t_process = ref("");
 const t_flowNo = ref("");
+const moreOpen = ref(false);
 const isEdit = ref(false);
 const data = reactive({
   form: {},
