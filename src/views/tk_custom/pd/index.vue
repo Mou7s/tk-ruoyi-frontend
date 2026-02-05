@@ -386,6 +386,7 @@ const t_process = ref("");
 const t_flowNo = ref("");
 const moreOpen = ref(false);
 const isEdit = ref(false);
+const lastProcessStatus = ref("0");
 const data = reactive({
   form: {},
   queryParams: {
@@ -440,6 +441,9 @@ function queryByFlowNo() {
       isEdit.value = false;
       open.value = true;
       form.value.pdNumber = form.value.number;
+      if (form.value.processStatus == null) {
+        form.value.processStatus = lastProcessStatus.value || "0";
+      }
       title.value = "添加盘点信息";
     }
     form.value.process = t_process.value;
@@ -477,7 +481,7 @@ function reset() {
     pdNumber: null,
     remark: null,
     isSplitBill: "0",
-    processStatus: "0",
+    processStatus: lastProcessStatus.value || "0",
   };
   proxy.resetForm("pdRef");
 }
@@ -547,6 +551,15 @@ function submitForm() {
     }
   });
 }
+
+watch(
+  () => form.value.processStatus,
+  (value) => {
+    if (value != null) {
+      lastProcessStatus.value = value;
+    }
+  },
+);
 
 /** 删除按钮操作 */
 function handleDelete(row) {
