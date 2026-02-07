@@ -173,10 +173,8 @@
           />
         </el-form-item>
       </el-col>
-      <right-toolbar
-        v-model:showSearch="showSearch"
-        @queryTable="getList"
-      ></right-toolbar>
+      <right-toolbar v-model:showSearch="showSearch" @queryTable="getList">
+      </right-toolbar>
     </el-row>
 
     <el-table
