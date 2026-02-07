@@ -51,42 +51,43 @@
           </el-form-item>
         </el-col>
         <!-- 右侧按钮固定一列 -->
-        <el-col :xs="24" :sm="12" :md="24" :lg="6" class="search-actions">
-          <el-button type="primary" icon="Search" @click="handleQuery">
-            搜索
-          </el-button>
-          <el-button icon="Refresh" @click="resetQuery"> 重置 </el-button>
+      </el-row>
 
-          <!-- 展开/收起更多条件 -->
-          <el-button link type="primary" @click="moreOpen = !moreOpen">
-            {{ moreOpen ? "收起" : "更多条件" }}
-          </el-button>
+      <el-row :gutter="12" align="middle">
+        <el-col :xs="24" :sm="12" :md="8" :lg="6">
+          <el-form-item label="产品编码" prop="productId">
+            <el-input
+              v-model="queryParams.productId"
+              placeholder="请输入产品编码"
+              clearable
+              @keyup.enter="handleQuery"
+            />
+          </el-form-item>
+        </el-col>
+
+        <el-col :xs="24" :sm="12" :md="8" :lg="6">
+          <el-form-item label="产品名称" prop="productName">
+            <el-input
+              v-model="queryParams.productName"
+              placeholder="请输入产品名称"
+              clearable
+              @keyup.enter="handleQuery"
+            />
+          </el-form-item>
+        </el-col>
+
+        <el-col :xs="24" :sm="12" :md="8" :lg="6">
+          <el-form-item label="规格型号" prop="specification">
+            <el-input
+              v-model="queryParams.specification"
+              placeholder="请输入规格型号"
+              clearable
+              @keyup.enter="handleQuery"
+            />
+          </el-form-item>
         </el-col>
       </el-row>
-      <el-form-item label="产品编码" prop="productId">
-        <el-input
-          v-model="queryParams.productId"
-          placeholder="请输入产品编码"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="产品名称" prop="productName">
-        <el-input
-          v-model="queryParams.productName"
-          placeholder="请输入产品名称"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="规格型号" prop="specification">
-        <el-input
-          v-model="queryParams.specification"
-          placeholder="请输入规格型号"
-          clearable
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
+
       <!--<el-form-item label="批号" prop="lot">-->
       <!--<el-input-->
       <!--v-model="queryParams.lot"-->
@@ -384,7 +385,6 @@ const total = ref(0);
 const title = ref("");
 const t_process = ref("");
 const t_flowNo = ref("");
-const moreOpen = ref(false);
 const isEdit = ref(false);
 const lastProcessStatus = ref("0");
 const data = reactive({
